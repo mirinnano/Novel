@@ -1,0 +1,364 @@
+*define
+; -----------------------------------------------------------
+; 基本設定
+; -----------------------------------------------------------
+caption "海風 -The Records of Autumn-"
+versionstr "海風 -The Records of Autumn-","ぽんこつソフトvol.1"
+rmenu "セーブ",save,"ロード",load,"回想",lookback,"スキップ",skip,"リセット",reset,"終了",end
+
+humanz 100
+windowback
+usewheel
+textgosub *text_lb
+
+globalon
+kidokumode 1
+effectskip 1
+nsa
+mode_ext
+defaultspeed 100,65,1
+mode_wave_demo
+
+defvoicevol 100
+defsevol 60
+defmp3vol 50
+
+; --- 変数定義 ---
+numalias bgm_vol, 100
+numalias se_vol, 101
+numalias msg_speed, 102
+
+; 各シナリオ進行フラグ
+numalias flg_prologue, 300
+numalias flg_day1, 301
+numalias flg_day2, 302
+numalias flg_day3, 303
+numalias flg_day4, 304
+numalias flg_day5, 305
+numalias flg_day6, 306
+numalias flg_day7, 307
+numalias flg_day8, 308
+numalias flg_day9, 309
+numalias flg_day10, 310
+numalias flg_day11, 311
+numalias flg_day12, 312
+numalias flg_day13, 313
+numalias flg_day14, 314
+
+killmenu 7
+killmenu 2
+
+menusetwindow 24, 24, 2, 4, 0, 1, "#000000"
+
+effect 2, 10, 1000
+effect 3, 10, 500
+
+defsub adv
+defsub nvl
+defsub thought
+defsub cls
+defsub talk
+defsub scenechange
+defsub quake
+defsub playbgm
+defsub playse
+defsub fadein
+defsub fadeout
+defsub envloop
+defsub stopenv
+defsub fadebgm
+defsub playmp3
+defsub fademp3
+
+game
+
+; ===========================================================
+; テキストクリック待ち（サンドイッチレイヤー対応版）
+; ===========================================================
+*text_lb
+getcursorpos %900, %901
+; 文字に被らないように少しズラす
+add %900, 2
+add %901, 2
+
+btndef clear
+
+*tbloop
+; ーーー【カーソル表示状態】ーーー
+lsp 250, "doncur.bmp", %900, %901
+print 1
+btntime 500
+textbtnwait %0
+
+if %0 == 0 goto *text_end
+if %0 == -3 goto *text_end
+if %0 == -1 gosub *rclk : goto *tbloop
+if %0 == -2 systemcall lookback : goto *tbloop
+if %0 != -5 goto *tbloop
+
+; ーーー【カーソル非表示状態】ーーー
+csp 250
+print 1
+btntime 500
+textbtnwait %0
+
+if %0 == 0 goto *text_end
+if %0 == -3 goto *text_end
+if %0 == -1 gosub *rclk : goto *tbloop_off
+if %0 == -2 systemcall lookback : goto *tbloop_off
+goto *tbloop
+
+*tbloop_off
+goto *tbloop
+
+*text_end
+; 次へ進むときにカーソルを消す
+csp 250
+print 1
+texec 
+saveon
+return
+; ===========================================================
+; 右クリック時のメニュー呼び出し
+; ===========================================================
+*rclk
+systemcall rmenu
+return
+; ===========================================================
+; 画面クリア
+; ===========================================================
+*cls
+textclear
+csp 100 ; 背景用スプライト等を消去
+return
+
+; --- ADVモード（フォント20） ---
+*adv
+textclear
+
+; 上部黒帯のスプライト番号を997から「251」に変更
+lsp 251, ":c;>640,60,#000000", 0, 0
+csp 252 ; （念のため）
+print 1
+
+setwindow 32, 390, 28, 4, 20, 20, 0, 4, %msg_speed, 0, 1, "#000000", 0, 380, 639, 479 
+return
+
+
+; --- NVLモード（フォント24に拡大） ---
+*nvl
+textclear
+
+; スプライト番号を修正
+csp 251
+csp 252
+print 1
+
+setwindow 40, 40, 23, 16, 24, 24, 0, 4, %msg_speed, 0, 1, "#000000", 0, 0, 639, 479 
+return
+
+
+; --- 心の声モード（フォント24に拡大） ---
+*thought
+textclear
+
+; スプライト番号を修正
+csp 251
+csp 252
+print 1
+
+setwindow 100, 140, 18, 7, 24, 24, 0, 4, %msg_speed, 0, 1, "#000000", 80, 120, 560, 340
+return
+
+*envloop
+getparam $0 : dwaveloop 1, $0 : return
+*stopenv
+dwavestop 1 : return
+*fadebgm
+getparam %1 : bgmfade %1 : return
+*fadeout
+getparam %1 : bg "#000000", %1 : return
+*fadein
+getparam $0, %1 : bg $0, %1 : return
+
+*talk
+getparam $0,$1
+textclear
+#88CCFF【$0】#FFFFFF
+$1\
+return
+
+*scenechange
+getparam $0,%1:bg "#000000", %1:bg $0, %1:return
+*quake
+quakex 5, 500:return
+*playbgm
+getparam $0 : bgm $0 : return
+*playse
+getparam $0 : dwave 0, $0 : return
+*playmp3
+getparam $0 : mp3loop $0 : return
+*fademp3
+getparam %1 : mp3fadeout %1 : return
+
+
+; ===========================================================
+; タイトル画面
+; ===========================================================
+*start
+if %bgm_vol == 0 mov %bgm_vol, 80
+if %se_vol == 0 mov %se_vol, 100
+if %msg_speed == 0 mov %msg_speed, 20
+
+bgmvol %bgm_vol : mp3vol %bgm_vol : sevol %se_vol
+
+cls
+csp -1
+erasetextwindow 0
+bg "bg/bg_title.bmp", 2
+
+; タイトルロゴ
+lsp 1, ":s/48,48,0;#FFFFFF#222222秋風 ", 60, 60
+lsp 2, ":s/14,14,0;#CCCCCC#222222- The Records of Autumn - ", 65, 120
+lsp 3, ":s/12,12,0;#999999#000000Ver 1.0 ", 610, 460
+
+; メニューボタン
+lsp 10, ":s/22,22,0;#FFFFFF#444444#FFCC66#884400  Game Start ", 420, 240
+lsp 11, ":s/22,22,0;#FFFFFF#444444#FFCC66#884400  Load Game ",  420, 290
+lsp 12, ":s/22,22,0;#FFFFFF#444444#FFCC66#884400  Settings ",   420, 340
+lsp 13, ":s/22,22,0;#FFFFFF#444444#FFCC66#884400  Exit Game ",  420, 390
+
+btndef clear
+spbtn 10, 1 : spbtn 11, 2 : spbtn 12, 3 : spbtn 13, 4
+print 2
+
+*title_loop
+btnwait %0
+if %0 == 1 goto *chapter_select  ; シナリオ選択画面へ
+if %0 == 2 goto *load_menu
+if %0 == 3 goto *settings_menu
+if %0 == 4 goto *game_end
+if %0 == -1 goto *title_loop
+goto *title_loop
+
+*game_end
+yesnobox %1, "ゲームを終了しますか？", "確認"
+if %1 == 1 end
+goto *title_loop
+
+*load_menu
+systemcall load
+goto *start
+
+
+; ===========================================================
+; シナリオ選択画面
+; ===========================================================
+*chapter_select
+cls
+csp -1
+erasetextwindow 0
+bg "#000000", 2
+
+lsp 1, ":s/32,32,0;#FFFFFF#222222Scenario Select ", 40, 40
+lsp 2, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 【Debug: 全解放】 ", 420, 50
+
+; 見出し
+lsp 10, ":s/16,16,0;#AAAAAA#000000-- 1st Week --", 60, 110
+lsp 11, ":s/16,16,0;#AAAAAA#000000-- 2nd Week --", 260, 110
+
+; プロローグ
+if %flg_prologue == 1 lsp 100, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 prologue ", 60, 140
+
+; 前半
+if %flg_day1 == 1 lsp 101, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 1 ", 60, 180
+if %flg_day2 == 1 lsp 102, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 2 ", 60, 220
+if %flg_day3 == 1 lsp 103, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 3 ", 60, 260
+if %flg_day4 == 1 lsp 104, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 4 ", 60, 300
+if %flg_day5 == 1 lsp 105, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 5 ", 60, 340
+if %flg_day6 == 1 lsp 106, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 6 ", 60, 380
+if %flg_day7 == 1 lsp 107, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 7 ", 60, 420
+
+; 後半
+if %flg_day8 == 1  lsp 108, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 8 ", 260, 140
+if %flg_day9 == 1  lsp 109, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 9 ", 260, 180
+if %flg_day10 == 1 lsp 110, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 10 ", 260, 220
+if %flg_day11 == 1 lsp 111, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 11 ", 260, 260
+if %flg_day12 == 1 lsp 112, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 12 ", 260, 300
+if %flg_day13 == 1 lsp 113, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 13 ", 260, 340
+if %flg_day14 == 1 lsp 114, ":s/20,20,0;#FFFFFF#444444#FFCC66#884400 Day 14 ", 260, 380
+
+lsp 200, ":s/22,22,0;#FFFFFF#444444#FFCC66#884400 Back to Title ", 400, 440
+print 2
+
+*chapter_loop
+btndef clear
+spbtn 2, 50
+if %flg_prologue == 1 spbtn 100, 100
+if %flg_day1 == 1 spbtn 101, 101
+if %flg_day2 == 1 spbtn 102, 102
+if %flg_day3 == 1 spbtn 103, 103
+if %flg_day4 == 1 spbtn 104, 104
+if %flg_day5 == 1 spbtn 105, 105
+if %flg_day6 == 1 spbtn 106, 106
+if %flg_day7 == 1 spbtn 107, 107
+if %flg_day8 == 1 spbtn 108, 108
+if %flg_day9 == 1 spbtn 109, 109
+if %flg_day10 == 1 spbtn 110, 110
+if %flg_day11 == 1 spbtn 111, 111
+if %flg_day12 == 1 spbtn 112, 112
+if %flg_day13 == 1 spbtn 113, 113
+if %flg_day14 == 1 spbtn 114, 114
+spbtn 200, 99
+btnwait %0
+
+if %0 == 99 goto *start
+if %0 == -1 goto *start
+if %0 == 50 gosub *debug_unlock : goto *chapter_select
+
+; シナリオ開始前にスプライトを消去
+if %0 >= 100 && %0 <= 114 csp -1
+
+if %0 == 100 goto *init
+if %0 == 101 goto *day1
+if %0 == 102 goto *day2
+if %0 == 103 goto *day3
+
+if %0 >= 102 && %0 <= 114 mesbox "このシナリオはまだ実装されていません。","通知" : goto *chapter_select
+
+goto *chapter_loop
+
+*debug_unlock
+mov %flg_prologue, 1 : mov %flg_day1, 1 : mov %flg_day2, 1 : mov %flg_day3, 1 : mov %flg_day4, 1 : mov %flg_day5, 1 : mov %flg_day6, 1 : mov %flg_day7, 1
+mov %flg_day8, 1 : mov %flg_day9, 1 : mov %flg_day10, 1 : mov %flg_day11, 1 : mov %flg_day12, 1 : mov %flg_day13, 1 : mov %flg_day14, 1
+return
+
+; ===========================================================
+; 設定画面
+; ===========================================================
+*settings_menu
+cls : csp -1 : bg "bg/bg_title.bmp", 2
+lsp 1, ":s/32,32,0;#FFFFFF#222222Settings ", 40, 40
+lsp 10, ":s/20,20,0;#FFFFFF#222222BGM/MP3 Volume ", 60, 140
+lsp 11, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 0% ", 200, 140
+lsp 12, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 50% ", 300, 140
+lsp 13, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 100% ", 400, 140
+lsp 20, ":s/20,20,0;#FFFFFF#222222Text Speed ", 60, 220
+lsp 21, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 Slow ", 200, 220
+lsp 22, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 Normal ", 320, 220
+lsp 23, ":s/18,18,0;#FFFFFF#444444#FFCC66#884400 Fast ", 460, 220
+lsp 30, ":s/22,22,0;#FFFFFF#444444#FFCC66#884400 Back to Title ", 400, 400
+btndef clear
+spbtn 11, 11 : spbtn 12, 12 : spbtn 13, 13 : spbtn 21, 21 : spbtn 22, 22 : spbtn 23, 23 : spbtn 30, 99
+print 2
+*settings_loop
+btnwait %0
+if %0 == 11 mov %bgm_vol, 0   : bgmvol %bgm_vol : mp3vol %bgm_vol
+if %0 == 12 mov %bgm_vol, 50  : bgmvol %bgm_vol : mp3vol %bgm_vol
+if %0 == 13 mov %bgm_vol, 100 : bgmvol %bgm_vol : mp3vol %bgm_vol
+if %0 == 21 mov %msg_speed, 40
+if %0 == 22 mov %msg_speed, 20
+if %0 == 23 mov %msg_speed, 0
+if %0 == 99 goto *start
+if %0 == -1 goto *start
+goto *settings_loop

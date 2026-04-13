@@ -1,0 +1,4 @@
+Leftover in 01.txt: 0
+Leftover in 02.txt: 0
+Leftover in 03.txt: 2
+Leftover in 04.txt: 0
