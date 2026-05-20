@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "skills": {
+    "autobrowse": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/autobrowse/SKILL.md",
+      "computedHash": "5fd5a14db3c4bbcad39f8a0d906813181aad7160cf9b0a7f5151b8ceb17121db"
+    },
+    "browser": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/browser/SKILL.md",
+      "computedHash": "21456d0f05d48a33236556de5055f167a68a891a1fbd0c90afeb1e51d6827662"
+    },
+    "browser-to-api": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/browser-to-api/SKILL.md",
+      "computedHash": "bcc3a61c490521c7e38325013eb756f30d8d3135a938b8069974441d25423bdd"
+    },
+    "browser-trace": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/browser-trace/SKILL.md",
+      "computedHash": "a49568a18e931b3587a4cce9b234a44427fbe325578bd7124ad149010e1b70ca"
+    },
+    "browserbase-cli": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/browserbase-cli/SKILL.md",
+      "computedHash": "9076df51604bf5834c61ee58c3d01edb283ea78ee889b6a59108acb8e81b9299"
+    },
+    "company-research": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/company-research/SKILL.md",
+      "computedHash": "bf9a163ab634a29824373409101484ebbc7ec6ff6b7ae8092cfc4a884b45baa7"
+    },
+    "cookie-sync": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cookie-sync/SKILL.md",
+      "computedHash": "53d8292f6e49138ef464c25ced7366f97558c1478a17351154f1fe89ca8dfc04"
+    },
+    "event-prospecting": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/event-prospecting/SKILL.md",
+      "computedHash": "a9f800ec2442993e1563a69e77508036f6600884e2b77e9ebbdeb9d230000415"
+    },
+    "fetch": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/fetch/SKILL.md",
+      "computedHash": "92c2f47cf31420ed47a3c47b2050c07adb656e1101afebe3ba441aa1157dff0d"
+    },
+    "functions": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/functions/SKILL.md",
+      "computedHash": "ccbfbcfd09c38de15b83404ea291f402e190b9c498f7c95a7f3e78af96a17239"
+    },
+    "safe-browser": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/safe-browser/SKILL.md",
+      "computedHash": "2c1f2124394e691d7663f60e23066195c3ebe3e868a5c76488d9485455e125e4"
+    },
+    "search": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/search/SKILL.md",
+      "computedHash": "3b2c11da55b97e4637dd0065a66838caeed7b4abcf90861b68fde116c3bbb874"
+    },
+    "ui-test": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-test/SKILL.md",
+      "computedHash": "d881ae3b0140ba5d1bb0155a1fe818b6ff2acfd76637e2f0f38913a8e66b469a"
+    }
+  }
+}
